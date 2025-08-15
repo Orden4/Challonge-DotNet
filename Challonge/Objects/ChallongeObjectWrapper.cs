@@ -1,8 +1,7 @@
 ﻿namespace Challonge.Objects
 {
-    internal abstract class ChallongeObjectWrapper<TObject>
-        where TObject : ChallongeObject
-    {
-        internal abstract TObject Item { get; set; }
-    }
+	internal abstract class ChallongeObjectWrapper<T>
+	{
+		public abstract T Item { get; set; }
+	}
 }

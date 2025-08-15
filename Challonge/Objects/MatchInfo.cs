@@ -1,43 +1,47 @@
-﻿using Challonge.JsonConverters;
-using Newtonsoft.Json;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Collections.Generic;
+using System.Text.Json.Serialization;
+using Challonge.JsonConverters;
 
 namespace Challonge.Objects
 {
-    public class MatchInfo : ChallongeObjectInfo
-    {
-        [JsonProperty("scores_csv")]
-        [JsonConverter(typeof(ScoresJsonConverter))]
-        public IEnumerable<Score> Scores { get; set; }
+	[Wrapper("match")]
+	public class MatchInfo : ChallongeObjectInfo
+	{
+		[JsonPropertyName("winner_id"), JsonInclude]
+		internal string? WinnerIdElement { get; set; }
 
-        [JsonProperty("winner_id")]
-        public long? WinnerId { get; set; }
+		[JsonIgnore]
+		public long? WinnerId
+		{
+			get => long.TryParse(WinnerIdElement, out var value) ? value : null;
+			set => WinnerIdElement = value.ToString()!;
+		}
 
-        [JsonProperty("player1_votes")]
-        public int? PlayerOneVotes { get; set; }
+		[JsonIgnore]
+		public bool ResultIsTie
+		{
+			get => WinnerIdElement == "tie";
+			set
+			{
+				if (value)
+				{
+					WinnerIdElement = "tie";
+				}
+				else if (!WinnerId.HasValue)
+				{
+					WinnerIdElement = null;
+				}
+			}
+		}
 
-        [JsonProperty("player2_votes")]
-        public int? PlayerTwoVotes { get; set; }
+		[JsonPropertyName("scores_csv")]
+		[JsonConverter(typeof(ScoresJsonConverter))]
+		public ICollection<Score>? Scores { get; set; }
 
-        [JsonIgnore]
-        public bool ResultIsTie { get; }
+		[JsonPropertyName("player1_votes")]
+		public int? PlayerOneVotes { get; set; }
 
-        public MatchInfo(bool resultIsTie = false)
-        {
-            ResultIsTie = resultIsTie;
-        }
-
-        internal override Dictionary<string, object> ToDictionary(bool ignoreNulls)
-        {
-            Dictionary<string, object> dictionary = ToDictionaryWithKeyPrefix("match", ignoreNulls);
-
-            if (ResultIsTie)
-            {
-                dictionary["match[winner_id]"] = "tie";
-            }
-
-            return dictionary;
-        }
-    }
+		[JsonPropertyName("player2_votes")]
+		public int? PlayerTwoVotes { get; set; }
+	}
 }

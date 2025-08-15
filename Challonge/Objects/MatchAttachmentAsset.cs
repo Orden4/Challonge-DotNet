@@ -1,14 +1,8 @@
 ﻿namespace Challonge.Objects
 {
-    public class MatchAttachmentAsset
-    {
-        public string FileName { get; set; }
-        public byte[] Content { get; set; }
-
-        public MatchAttachmentAsset(byte[] content, string fileName)
-        {
-            FileName = fileName;
-            Content = content;
-        }
-    }
+	public class MatchAttachmentAsset(byte[] content, string fileName)
+	{
+		public string FileName { get; set; } = fileName;
+		public byte[] Content { get; set; } = content;
+	}
 }

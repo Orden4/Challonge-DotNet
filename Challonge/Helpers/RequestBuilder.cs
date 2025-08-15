@@ -1,128 +1,119 @@
-﻿using Challonge.Objects;
-using System;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
-using System.IO;
 using System.Linq;
 using System.Net.Http;
+using System.Net.Http.Json;
+using System.Reflection;
+using System.Text.Json;
+using System.Web;
+using Challonge.Api;
+using Challonge.JsonConverters;
+using Challonge.Objects;
 
 namespace Challonge.Helpers
 {
-    internal static class RequestBuilder
-    {
-        internal static HttpRequestMessage BuildRequest(string url, HttpMethod method,
-            IEnumerable<KeyValuePair<string, object>> parameters)
-        {
-            IEnumerable<KeyValuePair<string, object>> cleaned = CleanParameters(parameters);
+	internal static class RequestBuilder
+	{
+		internal static HttpRequestMessage BuildRequest(string url, HttpMethod method, object? parameters)
+		{
+			return method.Method switch
+			{
+				"GET" => BuildGetRequest(url, parameters),
+				"POST" => BuildPostRequest(url, parameters),
+				"PUT" => BuildPutRequest(url, parameters),
+				"DELETE" => BuildDeleteRequest(url, parameters),
+				_ => throw new NotImplementedException("This HTTP method is not supported.")
+			};
+		}
 
-            return method.Method switch
-            {
-                "GET" => BuildGetRequest(url, cleaned),
-                "POST" => BuildPostRequest(url, cleaned),
-                "PUT" => BuildPutRequest(url, cleaned),
-                "DELETE" => BuildDeleteRequest(url, cleaned),
-                _ => throw new NotImplementedException("This HTTP method is not supported.")
-            };
-        }
+		private static HttpRequestMessage BuildGetRequest(string url, object? parameters)
+		{
+			return new(HttpMethod.Get, url + BuildQueryString(parameters));
+		}
 
-        private static HttpRequestMessage BuildGetRequest(string url,
-            IEnumerable<KeyValuePair<string, object>> parameters)
-        {
-            return new(HttpMethod.Get, url + BuildQueryString(parameters));
-        }
+		private static HttpRequestMessage BuildPostRequest(string url, object? parameters)
+		{
+			return new(HttpMethod.Post, url)
+			{
+				Content = BuildHttpContent(parameters),
+			};
+		}
 
-        private static HttpRequestMessage BuildPostRequest(string url,
-            IEnumerable<KeyValuePair<string, object>> parameters)
-        {
-            return new(HttpMethod.Post, url)
-            {
-                Content = BuildHttpContent(parameters)
-            };
-        }
+		private static HttpRequestMessage BuildPutRequest(string url, object? parameters)
+		{
+			return new(HttpMethod.Put, url)
+			{
+				Content = BuildHttpContent(parameters),
+			};
+		}
 
-        private static HttpRequestMessage BuildPutRequest(string url,
-            IEnumerable<KeyValuePair<string, object>> parameters)
-        {
-            return new(HttpMethod.Put, url)
-            {
-                Content = BuildHttpContent(parameters)
-            };
-        }
+		private static HttpRequestMessage BuildDeleteRequest(string url, object? parameters)
+		{
+			return new(HttpMethod.Delete, url)
+			{
+				Content = BuildHttpContent(parameters),
+			};
+		}
 
-        private static HttpRequestMessage BuildDeleteRequest(string url,
-            IEnumerable<KeyValuePair<string, object>> parameters)
-        {
-            return new(HttpMethod.Delete, url + BuildQueryString(parameters));
-        }
+		private static string BuildQueryString(object? parameters)
+		{
+			if (parameters == null)
+				return string.Empty;
 
-        private static string BuildQueryString(IEnumerable<KeyValuePair<string, object>> parameters)
-        {
-            string qString = "";
+			if (parameters is ChallongeObjectInfo)
+			{
+				var str = JsonSerializer.Serialize(parameters, ChallongeClient.JsonSerializerOptions);
+				parameters = JsonSerializer.Deserialize<Dictionary<string, object?>>(str, ChallongeClient.JsonSerializerOptions);
+			}
 
-            if (parameters.Any())
-            {
-                qString = "?" + string.Join("&", parameters
-                    .Where(kv => kv.Value != null)
-                    .Select(kv => $"{Uri.EscapeDataString(kv.Key)}=" +
-                        $"{Uri.EscapeDataString(kv.Value.ToString())}"));
-            }
+			var query = HttpUtility.ParseQueryString(string.Empty);
+			if (parameters is IDictionary<string, object?> dict)
+			{
+				foreach (var (key, value) in dict)
+				{
+					if (value != null)
+						query.Add(key, value.ToString());
+				}
+			}
 
-            return qString;
-        }
+			if (query.Count == 0)
+				return string.Empty;
 
-        private static HttpContent BuildHttpContent(IEnumerable<KeyValuePair<string, object>> parameters)
-        {
-            HttpContent content = null;
+			return $"?{query}";
+		}
 
-            if (parameters.Any(kv => kv.Value?.GetType() == typeof(MatchAttachmentAsset)))
-            {
-                MultipartFormDataContent fileContent = new();
+		private static HttpContent? BuildHttpContent(object? parameters)
+		{
+			if (parameters == null)
+				return null;
+			if (parameters is HttpContent content)
+				return content;
 
-                foreach (KeyValuePair<string, object> kv in parameters)
-                {
-                    string key = kv.Key;
-                    object value = kv.Value;
+			var key = default(string?);
+			var container = new MultipartFormDataContent();
 
-                    if (value is MatchAttachmentAsset a)
-                    {
-                        fileContent.Add(new StreamContent(
-                            new MemoryStream(a.Content)), key, a.FileName);
-                    }
-                    else
-                    {
-                        fileContent.Add(new StringContent(value?.ToString()), key);
-                    }
-                }
+			if (parameters is ChallongeObjectInfo info)
+			{
+				var infoType = parameters.GetType();
+				key = infoType.GetCustomAttribute<WrapperAttribute>()!.Name;
+			}
+			else if (parameters is IEnumerable)
+			{
+				var enumerableType = parameters.GetType();
+				var infoType = enumerableType.GetGenericArguments().ElementAtOrDefault(0) ?? enumerableType.GetElementType()!;
+				key = $"{infoType.GetCustomAttribute<WrapperAttribute>()!.Name}s";
+			}
+			else
+			{
+				return JsonContent.Create(parameters, options: ChallongeClient.JsonSerializerOptions);
+			}
 
-                content = fileContent;
-            }
-            else
-            {
-                content = new FormUrlEncodedContent(parameters.Select(kv =>
-                    new KeyValuePair<string, string>(kv.Key, kv.Value?.ToString())));
-            }
-
-            return content;
-        }
-
-        private static IEnumerable<KeyValuePair<string, object>> CleanParameters(
-            IEnumerable<KeyValuePair<string, object>> parameters)
-        {
-            List<KeyValuePair<string, object>> result = new();
-
-            foreach(KeyValuePair<string, object> kv in parameters ?? new List<KeyValuePair<string, object>>())
-            {
-                string key = kv.Key;
-                object value = kv.Value;
-
-                result.Add(new(key, value switch
-                {
-                    bool b => b.ToString().ToLowerInvariant(),
-                    DateTime d => d.ToString("O"),
-                    _ => value
-                }));
-            }
-
-            return result;
-        }
-    }
+			var dict = new Dictionary<string, object>
+			{
+				{ key, parameters }
+			};
+			return JsonContent.Create(dict, options: ChallongeClient.JsonSerializerOptions);
+		}
+	}
 }

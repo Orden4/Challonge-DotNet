@@ -1,29 +1,46 @@
-﻿using Newtonsoft.Json;
-using System.Collections.Generic;
+﻿using System.Text.Json.Serialization;
+using Challonge.JsonConverters;
 
 namespace Challonge.Objects
 {
-    public class ParticipantInfo : ChallongeObjectInfo
-    {
+	[Wrapper("participant")]
+	public class ParticipantInfo : ChallongeObjectInfo
+	{
+		[JsonPropertyName("invite_name_or_email"), JsonInclude]
+		internal string? InviteNameOrEmail { get; set; }
 
-        [JsonProperty("name")]
-        public string Name { get; set; }
+		private string? challongeUsername;
+		[JsonPropertyName("challonge_username")]
+		public string? ChallongeUsername
+		{
+			get => this.challongeUsername;
+			set
+			{
+				this.challongeUsername = value;
+				if (string.IsNullOrWhiteSpace(this.email))
+					InviteNameOrEmail = value;
+			}
+		}
 
-        [JsonProperty("challonge_username")]
-        public string ChallongeUsername { get; set; }
+		private string? email;
+		[JsonPropertyName("email")]
+		public string? Email
+		{
+			get => this.email;
+			set
+			{
+				this.email = value;
+				InviteNameOrEmail = value;
+			}
+		}
 
-        [JsonProperty("email")]
-        public string Email { get; set; }
+		[JsonPropertyName("name")]
+		public string? Name { get; set; }
 
-        [JsonProperty("seed")]
-        public int? Seed { get; set; }
+		[JsonPropertyName("seed")]
+		public int? Seed { get; set; }
 
-        [JsonProperty("misc")]
-        public string Misc { get; set; }
-
-        internal override Dictionary<string, object> ToDictionary(bool ignoreNulls)
-        {
-            return ToDictionaryWithKeyPrefix("participant", ignoreNulls);
-        }
-    }
+		[JsonPropertyName("misc")]
+		public string? Misc { get; set; }
+	}
 }

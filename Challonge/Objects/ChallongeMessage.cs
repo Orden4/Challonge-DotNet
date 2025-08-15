@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Challonge.Objects
 {
-    internal class ChallongeMessage
-    {
-        [JsonProperty("message")]
-        internal string Message { get; set; }
-    }
+	internal class ChallongeMessage
+	{
+		[JsonPropertyName("message")]
+		public string Message { get; set; }
+	}
 }

@@ -1,117 +1,103 @@
-﻿using Newtonsoft.Json;
-using Newtonsoft.Json.Converters;
-using System;
-using System.Collections.Generic;
+﻿using System;
+using System.Text.Json.Serialization;
+using Challonge.JsonConverters;
 
 namespace Challonge.Objects
 {
-    public class TournamentInfo : ChallongeObjectInfo
-    {
-        [JsonProperty("name")]
-        public string Name { get; set; }
+	[Wrapper("tournament")]
+	public class TournamentInfo : ChallongeObjectInfo
+	{
+		[JsonPropertyName("name")]
+		public string? Name { get; set; }
 
-        [JsonProperty("tournament_type")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public TournamentType TournamentType { get; set; }
+		[JsonPropertyName("tournament_type")]
+		public TournamentType? TournamentType { get; set; }
 
-        [JsonProperty("url")]
-        public string Url { get; set; }
+		[JsonPropertyName("url")]
+		public string? Url { get; set; }
 
-        [JsonProperty("subdomain")]
-        public string Subdomain { get; set; }
+		[JsonPropertyName("subdomain")]
+		public string? Subdomain { get; set; }
 
-        [JsonProperty("description")]
-        public string Description { get; set; }
+		[JsonPropertyName("description")]
+		public string? Description { get; set; }
 
-        [JsonProperty("open_signup")]
-        public bool OpenSignup { get; set; }
+		[JsonPropertyName("open_signup")]
+		public bool? OpenSignup { get; set; }
 
-        [JsonProperty("hold_third_place_match")]
-        public bool HoldThirdPlaceMatch { get; set; }
+		[JsonPropertyName("hold_third_place_match")]
+		public bool? HoldThirdPlaceMatch { get; set; }
 
-        [JsonProperty("pts_for_match_win")]
-        public double PtsForMatchWin { get; set; }
+		[JsonPropertyName("pts_for_match_win")]
+		public double? PtsForMatchWin { get; set; }
 
-        [JsonProperty("pts_for_match_tie")]
-        public double PtsForMatchTie { get; set; }
+		[JsonPropertyName("pts_for_match_tie")]
+		public double? PtsForMatchTie { get; set; }
 
-        [JsonProperty("pts_for_game_win")]
-        public double PtsForGameWin { get; set; }
+		[JsonPropertyName("pts_for_game_win")]
+		public double? PtsForGameWin { get; set; }
 
-        [JsonProperty("pts_for_game_tie")]
-        public double PtsForGameTie { get; set; }
+		[JsonPropertyName("pts_for_game_tie")]
+		public double? PtsForGameTie { get; set; }
 
-        [JsonProperty("pts_for_bye")]
-        public double PtsForBye { get; set; }
+		[JsonPropertyName("pts_for_bye")]
+		public double? PtsForBye { get; set; }
 
-        [JsonProperty("swiss_rounds")]
-        public int SwissRounds { get; set; }
+		[JsonPropertyName("swiss_rounds")]
+		public int? SwissRounds { get; set; }
 
-        [JsonProperty("ranked_by")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public RankingMethod? RankedBy { get; set; }
+		[JsonPropertyName("ranked_by")]
+		public RankingMethod? RankedBy { get; set; }
 
-        [JsonProperty("rr_pts_for_match_win")]
-        public double RRPtsForMatchWin { get; set; }
+		[JsonPropertyName("rr_pts_for_match_win")]
+		public double? RRPtsForMatchWin { get; set; }
 
-        [JsonProperty("rr_pts_for_match_tie")]
-        public double RRPtsForMatchTie { get; set; }
+		[JsonPropertyName("rr_pts_for_match_tie")]
+		public double? RRPtsForMatchTie { get; set; }
 
-        [JsonProperty("rr_pts_for_game_win")]
-        public double RRPtsForGameWin { get; set; }
+		[JsonPropertyName("rr_pts_for_game_win")]
+		public double? RRPtsForGameWin { get; set; }
 
-        [JsonProperty("rr_pts_for_game_tie")]
-        public double RRPtsForGameTie { get; set; }
+		[JsonPropertyName("rr_pts_for_game_tie")]
+		public double? RRPtsForGameTie { get; set; }
 
-        [JsonProperty("accept_attachments")]
-        public bool AcceptAttachments { get; set; }
+		[JsonPropertyName("accept_attachments")]
+		public bool? AcceptAttachments { get; set; }
 
-        [JsonProperty("hide_forum")]
-        public bool HideForum { get; set; }
+		[JsonPropertyName("hide_forum")]
+		public bool? HideForum { get; set; }
 
-        [JsonProperty("show_rounds")]
-        public bool ShowRounds { get; set; }
+		[JsonPropertyName("show_rounds")]
+		public bool? ShowRounds { get; set; }
 
-        [JsonProperty("private")]
-        public bool Private { get; set; }
+		[JsonPropertyName("private")]
+		public bool? Private { get; set; }
 
-        [JsonProperty("notify_users_when_matches_open")]
-        public bool NotifyUsersWhenMatchesOpen { get; set; }
+		[JsonPropertyName("notify_users_when_matches_open")]
+		public bool? NotifyUsersWhenMatchesOpen { get; set; }
 
-        [JsonProperty("notify_users_when_the_tournament_ends")]
-        public bool NotifyUsersWhenTheTournamentEnds { get; set; }
+		[JsonPropertyName("notify_users_when_the_tournament_ends")]
+		public bool? NotifyUsersWhenTheTournamentEnds { get; set; }
 
-        [JsonProperty("sequential_pairings")]
-        public bool SequentialPairings { get; set; }
+		[JsonPropertyName("sequential_pairings")]
+		public bool? SequentialPairings { get; set; }
 
-        [JsonProperty("signup_cap")]
-        public int? SignupCap { get; set; }
+		[JsonPropertyName("signup_cap")]
+		public int? SignupCap { get; set; }
 
-        [JsonProperty("start_at")]
-        public DateTime? StartAt { get; set; }
+		[JsonPropertyName("start_at")]
+		public DateTime? StartAt { get; set; }
 
-        [JsonProperty("check_in_duration")]
-        public int? CheckInDuration { get; set; }
+		[JsonPropertyName("check_in_duration")]
+		public int? CheckInDuration { get; set; }
 
-        [JsonProperty("prediction_method")]
-        public PredictionMethod PredictionMethod { get; set; }
+		[JsonPropertyName("prediction_method")]
+		public PredictionMethod? PredictionMethod { get; set; }
 
-        [JsonProperty("grand_finals_modifier")]
-        [JsonConverter(typeof(StringEnumConverter))]
-        public GrandFinalsModifier? GrandFinalsModifier { get; set; }
+		[JsonPropertyName("grand_finals_modifier")]
+		public GrandFinalsModifier? GrandFinalsModifier { get; set; }
 
-        public TournamentInfo()
-        {
-            PtsForMatchWin = 1;
-            PtsForMatchTie = 0.5;
-            PtsForBye = 1;
-            RRPtsForMatchWin = 1;
-            RRPtsForMatchTie = 0.5;
-        }
-
-        internal override Dictionary<string, object> ToDictionary(bool ignoreNulls)
-        {
-            return ToDictionaryWithKeyPrefix("tournament", ignoreNulls);
-        }
-    }
+		[JsonPropertyName("game_name")]
+		public string? GameName { get; set; }
+	}
 }

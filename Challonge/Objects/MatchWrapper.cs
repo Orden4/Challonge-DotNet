@@ -1,10 +1,10 @@
-﻿using Newtonsoft.Json;
+﻿using System.Text.Json.Serialization;
 
 namespace Challonge.Objects
 {
-    internal class MatchWrapper : ChallongeObjectWrapper<Match>
-    {
-        [JsonProperty("match")]
-        internal override Match Item { get; set; }
-    }
+	internal class MatchWrapper : ChallongeObjectWrapper<Match>
+	{
+		[JsonPropertyName("match")]
+		public override Match Item { get; set; }
+	}
 }

@@ -1,27 +1,23 @@
 ﻿using System;
 using System.Linq;
-using System.Runtime.Serialization;
+using System.Reflection;
+using Challonge.JsonConverters;
 
 namespace Challonge.Extensions.Internal
 {
-    internal static class EnumExtensions
-    {
-        internal static string GetEnumMemberValue(this Enum e)
-        {
-            string value = e.ToString();
+	internal static class EnumExtensions
+	{
+		internal static string GetEnumMemberValue(this Enum e)
+		{
+			var value = e.ToString();
 
-            object attribute = e.GetType()
-                .GetMember(e.ToString())
-                .FirstOrDefault()?
-                .GetCustomAttributes(typeof(EnumMemberAttribute), true)
-                .FirstOrDefault();
+			var attribute = e.GetType()
+				.GetMember(value)
+				.Single()
+				.GetCustomAttribute<JsonStringEnumMemberNameAttribute>()
+				?.Name;
 
-            if (attribute != null)
-            {
-                value = ((EnumMemberAttribute)attribute).Value;
-            }
-
-            return value;
-        }
-    }
+			return attribute ?? value;
+		}
+	}
 }

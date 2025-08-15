@@ -1,46 +1,47 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
+using System.Text.Json.Serialization;
 
 namespace Challonge.Objects
 {
-    public class MatchAttachment : ChallongeObject
-    {
-        [JsonProperty("id")]
-        public long Id { get; private set; }
+	public class MatchAttachment : ChallongeObject
+	{
+		[JsonPropertyName("id")]
+		public long Id { get; init; }
 
-        [JsonProperty("match_id")]
-        public long MatchId { get; private set; }
+		[JsonPropertyName("match_id")]
+		public long MatchId { get; init; }
 
-        [JsonProperty("user_id")]
-        public long UserId { get; private set; }
+		[JsonPropertyName("user_id")]
+		public long UserId { get; init; }
 
-        [JsonProperty("description")]
-        public string Description { get; private set; }
+		[JsonPropertyName("description")]
+		public string Description { get; init; }
 
-        [JsonProperty("url")]
-        public string Url { get; private set; }
+		[JsonPropertyName("url")]
+		public string Url { get; init; }
 
-        [JsonProperty("original_file_name")]
-        public string OriginalFileName { get; private set; }
+		[JsonPropertyName("original_file_name")]
+		public string OriginalFileName { get; init; }
 
-        [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; private set; }
+		[JsonPropertyName("created_at")]
+		public DateTime CreatedAt { get; init; }
 
-        [JsonProperty("updated_at")]
-        public DateTime? UpdatedAt { get; private set; }
+		[JsonPropertyName("updated_at")]
+		public DateTime? UpdatedAt { get; init; }
 
-        [JsonProperty("asset_file_name")]
-        public string AssetFileName { get; private set; }
+		[JsonPropertyName("asset_file_name")]
+		public string AssetFileName { get; init; }
 
-        [JsonProperty("asset_content_type")]
-        public string AssetContentType { get; private set; }
+		[JsonPropertyName("asset_content_type")]
+		public string AssetContentType { get; init; }
 
-        [JsonProperty("asset_file_size")]
-        public long? AssetFileSize { get; private set; }
+		[JsonPropertyName("asset_file_size")]
+		public long? AssetFileSize { get; init; }
 
-        [JsonProperty("asset_url")]
-        public string AssetUrl { get; private set; }
+		[JsonPropertyName("asset_url")]
+		public string AssetUrl { get; init; }
 
-        internal MatchAttachment() { }
-    }
+		[JsonConstructor]
+		internal MatchAttachment() { }
+	}
 }

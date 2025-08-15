@@ -1,119 +1,120 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
+using System.Text.Json.Serialization;
 
 namespace Challonge.Objects
 {
-    public class Participant : ChallongeObject
-    {
-        [JsonProperty("id")]
-        public long Id { get; private set; }
+	public class Participant : ChallongeObject
+	{
+		[JsonPropertyName("id")]
+		public long Id { get; init; }
 
-        [JsonProperty("tournament_id")]
-        public long TournamentId { get; private set; }
+		[JsonPropertyName("tournament_id")]
+		public long TournamentId { get; init; }
 
-        [JsonProperty("name")]
-        public string Name { get; private set; }
+		[JsonPropertyName("name")]
+		public string Name { get; init; }
 
-        [JsonProperty("seed")]
-        public int Seed { get; private set; }
+		[JsonPropertyName("seed")]
+		public int Seed { get; init; }
 
-        [JsonProperty("active")]
-        public bool Active { get; private set; }
+		[JsonPropertyName("active")]
+		public bool Active { get; init; }
 
-        [JsonProperty("created_at")]
-        public DateTime CreatedAt { get; private set; }
+		[JsonPropertyName("created_at")]
+		public DateTime CreatedAt { get; init; }
 
-        [JsonProperty("updated_at")]
-        public DateTime? UpdatedAt { get; private set; }
+		[JsonPropertyName("updated_at")]
+		public DateTime? UpdatedAt { get; init; }
 
-        [JsonProperty("invite_email")]
-        public string InviteEmail { get; private set; }
+		[JsonPropertyName("invite_email")]
+		public string InviteEmail { get; init; }
 
-        [JsonProperty("final_rank")]
-        public int? FinalRank { get; private set; }
+		[JsonPropertyName("final_rank")]
+		public int? FinalRank { get; init; }
 
-        [JsonProperty("misc")]
-        public string Misc { get; private set; }
+		[JsonPropertyName("misc")]
+		public string Misc { get; init; }
 
-        [JsonProperty("icon")]
-        public string Icon { get; private set; }
+		[JsonPropertyName("icon")]
+		public string Icon { get; init; }
 
-        [JsonProperty("on_waiting_list")]
-        public bool OnWaitingList { get; private set; }
+		[JsonPropertyName("on_waiting_list")]
+		public bool OnWaitingList { get; init; }
 
-        [JsonProperty("invitation_id")]
-        public long? InvitationId { get; private set; }
+		[JsonPropertyName("invitation_id")]
+		public long? InvitationId { get; init; }
 
-        [JsonProperty("group_id")]
-        public long? GroupId { get; private set; }
+		[JsonPropertyName("group_id")]
+		public long? GroupId { get; init; }
 
-        [JsonProperty("checked_in_at")]
-        public DateTime? CheckedInAt { get; private set; }
+		[JsonPropertyName("checked_in_at")]
+		public DateTime? CheckedInAt { get; init; }
 
-        [JsonProperty("ranked_member_id")]
-        public long? RankedMemberId { get; private set; }
+		[JsonPropertyName("ranked_member_id")]
+		public long? RankedMemberId { get; init; }
 
-        [JsonProperty("custom_field_response")]
-        public string CustomFieldResponse { get; private set; }
+		[JsonPropertyName("custom_field_response")]
+		public string CustomFieldResponse { get; init; }
 
-        [JsonProperty("clinch")]
-        public string Clinch { get; private set; }
+		[JsonPropertyName("clinch")]
+		public string Clinch { get; init; }
 
-        [JsonProperty("integration_uids")]
-        public IEnumerable<string> IntegrationUids { get; private set; }
+		[JsonPropertyName("integration_uids")]
+		public IEnumerable<string> IntegrationUids { get; init; }
 
-        [JsonProperty("challonge_username")]
-        public string ChallongeUsername { get; private set; }
+		[JsonPropertyName("challonge_username")]
+		public string ChallongeUsername { get; init; }
 
-        [JsonProperty("challonge_email_address_verified")]
-        public bool? ChallongeEmailAddressVerified { get; private set; }
+		[JsonPropertyName("challonge_email_address_verified")]
+		public bool? ChallongeEmailAddressVerified { get; init; }
 
-        [JsonProperty("removable")]
-        public bool Removable { get; private set; }
+		[JsonPropertyName("removable")]
+		public bool Removable { get; init; }
 
-        [JsonProperty("participatable_or_invitation_attached")]
-        public bool ParticipatableOrInvitationAttached { get; private set; }
+		[JsonPropertyName("participatable_or_invitation_attached")]
+		public bool ParticipatableOrInvitationAttached { get; init; }
 
-        [JsonProperty("confirm_remove")]
-        public bool ConfirmRemove { get; private set; }
+		[JsonPropertyName("confirm_remove")]
+		public bool ConfirmRemove { get; init; }
 
-        [JsonProperty("invitation_pending")]
-        public bool InvitationPending { get; private set; }
+		[JsonPropertyName("invitation_pending")]
+		public bool InvitationPending { get; init; }
 
-        [JsonProperty("display_name_with_invitation_email_address")]
-        public string DisplayNameWithInvitationEmailAddress { get; private set; }
+		[JsonPropertyName("display_name_with_invitation_email_address")]
+		public string DisplayNameWithInvitationEmailAddress { get; init; }
 
-        [JsonProperty("email_hash")]
-        public string EmailHash { get; private set; }
+		[JsonPropertyName("email_hash")]
+		public string EmailHash { get; init; }
 
-        [JsonProperty("username")]
-        public string Username { get; private set; }
+		[JsonPropertyName("username")]
+		public string Username { get; init; }
 
-        [JsonProperty("display_name")]
-        public string DisplayName { get; private set; }
+		[JsonPropertyName("display_name")]
+		public string DisplayName { get; init; }
 
-        [JsonProperty("attached_participatable_portrait_url")]
-        public string AttachedParticipatablePortraitUrl { get; private set; }
+		[JsonPropertyName("attached_participatable_portrait_url")]
+		public string AttachedParticipatablePortraitUrl { get; init; }
 
-        [JsonProperty("can_check_in")]
-        public bool CanCheckIn { get; private set; }
+		[JsonPropertyName("can_check_in")]
+		public bool CanCheckIn { get; init; }
 
-        [JsonProperty("checked_in")]
-        public bool CheckedIn { get; private set; }
+		[JsonPropertyName("checked_in")]
+		public bool CheckedIn { get; init; }
 
-        [JsonProperty("reactivatable")]
-        public bool Reactivatable { get; private set; }
+		[JsonPropertyName("reactivatable")]
+		public bool Reactivatable { get; init; }
 
-        [JsonProperty("check_in_open")]
-        public bool CheckInOpen { get; private set; }
+		[JsonPropertyName("check_in_open")]
+		public bool CheckInOpen { get; init; }
 
-        [JsonProperty("group_player_ids")]
-        public IEnumerable<int> GroupPlayerIds { get; private set; }
+		[JsonPropertyName("group_player_ids")]
+		public IEnumerable<int> GroupPlayerIds { get; init; }
 
-        [JsonProperty("has_irrelevant_seed")]
-        public bool HasIrrelevantSeed { get; private set; }
+		[JsonPropertyName("has_irrelevant_seed")]
+		public bool HasIrrelevantSeed { get; init; }
 
-        internal Participant() { }
-    }
+		[JsonConstructor]
+		internal Participant() { }
+	}
 }

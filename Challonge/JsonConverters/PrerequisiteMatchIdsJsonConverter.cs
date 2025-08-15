@@ -1,31 +1,33 @@
-﻿using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
-using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
 
 namespace Challonge.JsonConverters
 {
-    internal class PrerequisiteMatchIdsJsonConverter : JsonConverter<IEnumerable<long>>
-    {
-        public override IEnumerable<long> ReadJson(JsonReader reader, Type objectType, [AllowNull] IEnumerable<long> existingValue, bool hasExistingValue, JsonSerializer serializer)
-        {
-            string[] split = reader.Value?.ToString().Split(",");
+	internal class PrerequisiteMatchIdsJsonConverter : JsonConverter<ICollection<long>>
+	{
+		public override ICollection<long>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+		{
+			var value = reader.GetString();
+			if (value == null)
+				return [];
 
-            if (split == null || split.Any(s => !long.TryParse(s.Trim(), out _)))
-            {
-                return new List<long>();
-            }
+			var split = value.Split(',', StringSplitOptions.RemoveEmptyEntries);
+			var scores = new List<long>(split.Length);
+			for (var i = 0; i < split.Length; i++)
+			{
+				scores.Add(long.Parse(split[i]));
+			}
+			return scores;
+		}
 
-            return split.Select(s => long.Parse(s.Trim()));
-        }
-
-        public override void WriteJson(JsonWriter writer, [AllowNull] IEnumerable<long> value, JsonSerializer serializer)
-        {
-            if (value != null)
-            {
-                writer.WriteValue(string.Join(",", value.Select(l => l.ToString())));
-            }
-        }
-    }
+		public override void Write(Utf8JsonWriter writer, ICollection<long> value, JsonSerializerOptions options)
+		{
+			if (value != null)
+			{
+				writer.WriteStringValue(string.Join(',', value));
+			}
+		}
+	}
 }

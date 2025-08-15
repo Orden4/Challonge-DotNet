@@ -1,104 +1,111 @@
-﻿using System.Runtime.Serialization;
+﻿using System.Text.Json.Serialization;
+using Challonge.JsonConverters;
 
 namespace Challonge.Objects
 {
-    public enum TournamentState
-    {
-        [EnumMember(Value = "all")]
-        All,
-        [EnumMember(Value = "pending")]
-        Pending,
-        [EnumMember(Value = "in_progress")]
-        InProgress,
-        [EnumMember(Value = "underway")]
-        Underway,
-        [EnumMember(Value = "ended")]
-        Ended,
-        [EnumMember(Value = "checking_in")]
-        CheckingIn,
-        [EnumMember(Value = "checked_in")]
-        CheckedIn,
-        [EnumMember(Value = "accepting_predictions")]
-        AcceptingPredictions,
-        [EnumMember(Value = "awaiting_review")]
-        AwaitingReview,
-        [EnumMember(Value = "complete")]
-        Complete
-    }
-    public enum TournamentType
-    {
-        [EnumMember(Value = "single elimination")]
-        SingleElimination,
-        [EnumMember(Value = "double elimination")]
-        DoubleElimination,
-        [EnumMember(Value = "round robin")]
-        RoundRobin,
-        [EnumMember(Value = "swiss")]
-        Swiss,
-        [EnumMember(Value = "free for all")]
-        FreeForAll,
-        [EnumMember(Value = "leaderboard")]
-        Leaderboard,
-        [EnumMember(Value = "time trial")]
-        TimeTrial,
-        [EnumMember(Value = "single race")]
-        SingleRace,
-        [EnumMember(Value = "grand prix")]
-        GrandPrix,
-    }
-    public enum RankingMethod
-    {
-        [EnumMember(Value = "match wins")]
-        MatchWins,
-        [EnumMember(Value = "game wins")]
-        GameWins,
-        [EnumMember(Value = "points scored")]
-        PointsScored,
-        [EnumMember(Value = "points difference")]
-        PointsDifference,
-        [EnumMember(Value = "custom")]
-        Custom
-    }
-    public enum PredictionMethod
-    {
-        Default,
-        ExponentialScoring,
-        LinearScoring
-    }
-    public enum GrandFinalsModifier
-    {
-        [EnumMember(Value = "single match")]
-        SingleMatch,
-        [EnumMember(Value = "skip")]
-        Skip
-    }
-    public enum MatchState
-    {
-        [EnumMember(Value = "all")]
-        All,
-        [EnumMember(Value = "pending")]
-        Pending,
-        [EnumMember(Value = "open")]
-        Open,
-        [EnumMember(Value = "complete")]
-        Complete
-    }
+	[JsonConverter(typeof(CustomJsonStringEnumConverter<TournamentState>))]
+	public enum TournamentState
+	{
+		[JsonStringEnumMemberName("all")]
+		All,
+		[JsonStringEnumMemberName("pending")]
+		Pending,
+		[JsonStringEnumMemberName("in_progress")]
+		InProgress,
+		[JsonStringEnumMemberName("underway")]
+		Underway,
+		[JsonStringEnumMemberName("ended")]
+		Ended,
+		[JsonStringEnumMemberName("checking_in")]
+		CheckingIn,
+		[JsonStringEnumMemberName("checked_in")]
+		CheckedIn,
+		[JsonStringEnumMemberName("accepting_predictions")]
+		AcceptingPredictions,
+		[JsonStringEnumMemberName("awaiting_review")]
+		AwaitingReview,
+		[JsonStringEnumMemberName("complete")]
+		Complete
+	}
+	[JsonConverter(typeof(CustomJsonStringEnumConverter<TournamentType>))]
+	public enum TournamentType
+	{
+		[JsonStringEnumMemberName("single elimination")]
+		SingleElimination,
+		[JsonStringEnumMemberName("double elimination")]
+		DoubleElimination,
+		[JsonStringEnumMemberName("round robin")]
+		RoundRobin,
+		[JsonStringEnumMemberName("swiss")]
+		Swiss,
+		[JsonStringEnumMemberName("free for all")]
+		FreeForAll,
+		[JsonStringEnumMemberName("leaderboard")]
+		Leaderboard,
+		[JsonStringEnumMemberName("time trial")]
+		TimeTrial,
+		[JsonStringEnumMemberName("single race")]
+		SingleRace,
+		[JsonStringEnumMemberName("grand prix")]
+		GrandPrix,
+	}
+	[JsonConverter(typeof(CustomJsonStringEnumConverter<RankingMethod>))]
+	public enum RankingMethod
+	{
+		[JsonStringEnumMemberName("match wins")]
+		MatchWins,
+		[JsonStringEnumMemberName("game wins")]
+		GameWins,
+		[JsonStringEnumMemberName("points scored")]
+		PointsScored,
+		[JsonStringEnumMemberName("points difference")]
+		PointsDifference,
+		[JsonStringEnumMemberName("custom")]
+		Custom
+	}
+	public enum PredictionMethod
+	{
+		Default,
+		ExponentialScoring,
+		LinearScoring
+	}
+	[JsonConverter(typeof(CustomJsonStringEnumConverter<GrandFinalsModifier>))]
+	public enum GrandFinalsModifier
+	{
+		[JsonStringEnumMemberName("single match")]
+		SingleMatch,
+		[JsonStringEnumMemberName("skip")]
+		Skip
+	}
+	[JsonConverter(typeof(CustomJsonStringEnumConverter<MatchState>))]
+	public enum MatchState
+	{
+		[JsonStringEnumMemberName("all")]
+		All,
+		[JsonStringEnumMemberName("pending")]
+		Pending,
+		[JsonStringEnumMemberName("open")]
+		Open,
+		[JsonStringEnumMemberName("complete")]
+		Complete
+	}
 
-    public enum TieBreak
-    {
-        [EnumMember(Value = "match wins")]
-        MatchWins,
-        [EnumMember(Value = "game wins")]
-        GameWins,
-        [EnumMember(Value = "game win percentage")]
-        GameWinPercentage,
-        [EnumMember(Value = "points scored")]
-        PointsScored,
-        [EnumMember(Value = "points difference")]
-        PointsDifference,
-        [EnumMember(Value = "match wins vs tied")]
-        MatchWinsVsTied,
-        [EnumMember(Value = "median buchholz")]
-        MedianBuchholz
-    }
+	[JsonConverter(typeof(CustomJsonStringEnumConverter<TieBreak>))]
+	public enum TieBreak
+	{
+		[JsonStringEnumMemberName("match wins")]
+		MatchWins,
+		[JsonStringEnumMemberName("game wins")]
+		GameWins,
+		[JsonStringEnumMemberName("game win percentage")]
+		GameWinPercentage,
+		[JsonStringEnumMemberName("points scored")]
+		PointsScored,
+		[JsonStringEnumMemberName("points difference")]
+		PointsDifference,
+		[JsonStringEnumMemberName("match wins vs tied")]
+		MatchWinsVsTied,
+		[JsonStringEnumMemberName("median buchholz")]
+		MedianBuchholz
+	}
 }

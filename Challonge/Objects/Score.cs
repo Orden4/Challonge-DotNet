@@ -1,4 +1,4 @@
 ﻿namespace Challonge.Objects
 {
-    public record Score(int PlayerOneScore, int PlayerTwoScore);
+	public readonly record struct Score(int PlayerOneScore, int PlayerTwoScore);
 }

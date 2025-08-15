@@ -1,32 +1,35 @@
-﻿using Challonge.Objects;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Diagnostics.CodeAnalysis;
 using System.Linq;
+using System.Text.Json;
+using System.Text.Json.Serialization;
+using Challonge.Objects;
 
 namespace Challonge.JsonConverters
 {
-    internal class ScoresJsonConverter : JsonConverter<IEnumerable<Score>>
-    {
-        public override IEnumerable<Score> ReadJson(JsonReader reader, Type objectType, [AllowNull] IEnumerable<Score> existingValue, bool hasExistingValue, JsonSerializer serializer)
-        {
-            IEnumerable<string[]> scoreSplits = reader.Value?.ToString().Split(",")
-                .Select(s => s.Trim().Split("-"));
+	internal class ScoresJsonConverter : JsonConverter<ICollection<Score>>
+	{
+		public override ICollection<Score>? Read(ref Utf8JsonReader reader, Type typeToConvert, JsonSerializerOptions options)
+		{
+			var value = reader.GetString();
+			if (value == null)
+				return [];
 
-            if (scoreSplits == null || scoreSplits.Any(a => a.Any(s => !int.TryParse(s.Trim(), out _))))
-            {
-                return new List<Score>();
-            }
-            return scoreSplits.Select(a => new Score(int.Parse(a[0].Trim()), int.Parse(a[1].Trim())));
-        }
+			var split = value.Split((char[])[',', '-'], StringSplitOptions.RemoveEmptyEntries);
+			var scores = new List<Score>(split.Length / 2);
+			for (var i = 0; i < split.Length - 1; i += 2)
+			{
+				scores.Add(new(int.Parse(split[i]), int.Parse(split[i + 1])));
+			}
+			return scores;
+		}
 
-        public override void WriteJson(JsonWriter writer, [AllowNull] IEnumerable<Score> value, JsonSerializer serializer)
-        {
-            if (value != null)
-            {
-                writer.WriteValue(string.Join(",", value.Select(s => $"{s.PlayerOneScore}-{s.PlayerTwoScore}")));
-            }
-        }
-    }
+		public override void Write(Utf8JsonWriter writer, ICollection<Score> value, JsonSerializerOptions options)
+		{
+			if (value != null)
+			{
+				writer.WriteStringValue(string.Join(',', value.Select(s => $"{s.PlayerOneScore}-{s.PlayerTwoScore}")));
+			}
+		}
+	}
 }
