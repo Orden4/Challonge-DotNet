@@ -9,17 +9,23 @@ namespace ChallongeTests
 		internal static byte[] GenerateTestPngBytes()
 		{
 			var tempFileName = Path.ChangeExtension(Path.GetRandomFileName(), "png");
-
 			using Bitmap bitmap = new(150, 150, PixelFormat.Format24bppRgb);
-			bitmap.Save(tempFileName, ImageFormat.Png);
 
-			using FileStream fs = new(tempFileName, FileMode.Open);
-			var buffer = new byte[fs.Length];
-			fs.Read(buffer, 0, (int)fs.Length);
-			fs.Close();
-			File.Delete(tempFileName);
+			try
+			{
+				bitmap.Save(tempFileName, ImageFormat.Png);
 
-			return buffer;
+				using FileStream fs = new(tempFileName, FileMode.Open);
+				var buffer = new byte[fs.Length];
+				fs.Read(buffer, 0, (int)fs.Length);
+				fs.Close();
+
+				return buffer;
+			}
+			finally
+			{
+				File.Delete(tempFileName);
+			}
 		}
 	}
 }
