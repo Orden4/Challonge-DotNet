@@ -1,7 +1,7 @@
 ﻿using Challonge.Api;
 using Microsoft.Extensions.DependencyInjection;
 
-namespace Challonge.Extensions.DependencyInjection
+namespace Challonge.Extensions
 {
 	public static class ChallongeServiceCollectionExtensions
 	{

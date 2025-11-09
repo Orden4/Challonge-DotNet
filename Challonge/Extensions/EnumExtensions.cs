@@ -3,7 +3,7 @@ using System.Linq;
 using System.Reflection;
 using Challonge.JsonConverters;
 
-namespace Challonge.Extensions.Internal
+namespace Challonge.Extensions
 {
 	internal static class EnumExtensions
 	{

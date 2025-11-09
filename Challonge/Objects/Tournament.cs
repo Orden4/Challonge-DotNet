@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Text.Json.Serialization;
+using Challonge.JsonConverters;
 
 namespace Challonge.Objects
 {
@@ -12,6 +13,7 @@ namespace Challonge.Objects
 			public int? CurrentRound { get; init; }
 
 			[JsonPropertyName("participants_per_match")]
+			[JsonConverter(typeof(NullableStringIntegerConverter))]
 			public int? ParticipantsPerMatch { get; init; }
 
 			[JsonConstructor]
@@ -190,10 +192,10 @@ namespace Challonge.Objects
 		public bool? PredictTheLosersBracket { get; init; }
 
 		[JsonPropertyName("spam")]
-		public string Spam { get; init; }
+		public bool? Spam { get; init; }
 
 		[JsonPropertyName("ham")]
-		public string Ham { get; init; }
+		public bool? Ham { get; init; }
 
 		[JsonPropertyName("rr_iterations")]
 		public int? RRIterations { get; init; }

@@ -99,5 +99,8 @@ namespace Challonge.Objects
 
 		[JsonPropertyName("game_name")]
 		public string? GameName { get; set; }
+
+		[JsonPropertyName("hide_seeds")]
+		public bool? HideSeeds { get; set; }
 	}
 }

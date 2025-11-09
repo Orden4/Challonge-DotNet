@@ -9,7 +9,7 @@ using System.Text.Json;
 using System.Text.Json.Serialization;
 using System.Threading.Tasks;
 using Challonge.Exceptions;
-using Challonge.Extensions.Internal;
+using Challonge.Extensions;
 using Challonge.Helpers;
 using Challonge.Objects;
 
