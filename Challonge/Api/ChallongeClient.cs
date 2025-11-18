@@ -11,6 +11,7 @@ using System.Threading.Tasks;
 using Challonge.Exceptions;
 using Challonge.Extensions;
 using Challonge.Helpers;
+using Challonge.JsonConverters;
 using Challonge.Objects;
 
 namespace Challonge.Api
@@ -18,6 +19,14 @@ namespace Challonge.Api
 	/// <inheritdoc cref="IChallongeClient"/>
 	public sealed class ChallongeClient : IChallongeClient
 	{
+		internal static JsonSerializerOptions SourceGenSerializerOptions { get; } = new()
+		{
+			PropertyNameCaseInsensitive = true,
+			PropertyNamingPolicy = JsonNamingPolicy.SnakeCaseLower,
+			NumberHandling = JsonNumberHandling.AllowReadingFromString,
+			DefaultIgnoreCondition = JsonIgnoreCondition.WhenWritingNull,
+			TypeInfoResolver = ChallongeJsonContext.Default,
+		};
 		internal static JsonSerializerOptions JsonSerializerOptions { get; } = new()
 		{
 			PropertyNameCaseInsensitive = true,
@@ -47,7 +56,7 @@ namespace Challonge.Api
 			if (!response.IsSuccessStatusCode)
 				throw new ChallongeException(responseText, response.StatusCode);
 
-			return JsonSerializer.Deserialize<TReturn>(responseText, JsonSerializerOptions)!;
+			return JsonSerializer.Deserialize<TReturn>(responseText, SourceGenSerializerOptions)!;
 		}
 
 		public async Task<IEnumerable<Tournament>> GetTournamentsAsync(TournamentState? state = null, TournamentType? type = null,
@@ -217,7 +226,7 @@ namespace Challonge.Api
 
 		public async Task<IEnumerable<Participant>> GetParticipantsAsync(string tournament)
 		{
-			var wrappers = await SendRequestAsync<IEnumerable<ParticipantWrapper>>(
+			var wrappers = await SendRequestAsync<ParticipantWrapper[]>(
 				$"tournaments/{tournament}/participants.json",
 				HttpMethod.Get
 			);
@@ -249,7 +258,7 @@ namespace Challonge.Api
 		public async Task<IEnumerable<Participant>> CreateParticipantsAsync(string tournament,
 			IEnumerable<ParticipantInfo> participantInfos)
 		{
-			var wrappers = await SendRequestAsync<IEnumerable<ParticipantWrapper>>(
+			var wrappers = await SendRequestAsync<ParticipantWrapper[]>(
 				$"tournaments/{tournament}/participants/bulk_add.json",
 				HttpMethod.Post,
 				participantInfos
@@ -332,7 +341,7 @@ namespace Challonge.Api
 
 		public async Task<IEnumerable<Participant>> RandomizeParticipantsAsync(string tournament)
 		{
-			var wrappers = await SendRequestAsync<IEnumerable<ParticipantWrapper>>(
+			var wrappers = await SendRequestAsync<ParticipantWrapper[]>(
 				$"tournaments/{tournament}/participants/randomize.json",
 				HttpMethod.Post
 			);
@@ -353,7 +362,7 @@ namespace Challonge.Api
 				{ "participant_id", participant?.Id }
 			};
 
-			var wrappers = await SendRequestAsync<IEnumerable<MatchWrapper>>(
+			var wrappers = await SendRequestAsync<MatchWrapper[]>(
 				$"tournaments/{tournament}/matches.json",
 				HttpMethod.Get,
 				parameters
@@ -425,7 +434,7 @@ namespace Challonge.Api
 
 		public async Task<IEnumerable<MatchAttachment>> GetMatchAttachmentsAsync(Match match)
 		{
-			var wrappers = await SendRequestAsync<IEnumerable<MatchAttachmentWrapper>>(
+			var wrappers = await SendRequestAsync<MatchAttachmentWrapper[]>(
 				$"tournaments/{match.TournamentId}/matches/{match.Id}/attachments.json",
 				HttpMethod.Get
 			);
@@ -435,10 +444,11 @@ namespace Challonge.Api
 
 		public async Task<MatchAttachment> CreateMatchAttachmentAsync(Match match, MatchAttachmentInfo matchAttachmentInfo)
 		{
+			using var matchAttachmentContent = PrepareMatchAttachment(matchAttachmentInfo);
 			var wrapper = await SendRequestAsync<MatchAttachmentWrapper>(
 				$"tournaments/{match.TournamentId}/matches/{match.Id}/attachments.json",
 				HttpMethod.Post,
-				PrepareMatchAttachment(matchAttachmentInfo)
+				matchAttachmentContent
 			);
 
 			return wrapper.Item;
@@ -456,10 +466,11 @@ namespace Challonge.Api
 
 		public async Task<MatchAttachment> UpdateMatchAttachmentAsync(Match match, MatchAttachment matchAttachment, MatchAttachmentInfo matchAttachmentInfo)
 		{
+			using var matchAttachmentContent = PrepareMatchAttachment(matchAttachmentInfo);
 			var wrapper = await SendRequestAsync<MatchAttachmentWrapper>(
 				$"tournaments/{match.TournamentId}/matches/{match.Id}/attachments/{matchAttachment.Id}.json",
 				HttpMethod.Put,
-				PrepareMatchAttachment(matchAttachmentInfo)
+				matchAttachmentContent
 			);
 
 			return wrapper.Item;

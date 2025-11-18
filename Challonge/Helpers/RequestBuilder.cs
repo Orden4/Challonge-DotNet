@@ -63,7 +63,7 @@ namespace Challonge.Helpers
 
 			if (parameters is ChallongeObjectInfo)
 			{
-				var str = JsonSerializer.Serialize(parameters, ChallongeClient.JsonSerializerOptions);
+				var str = JsonSerializer.Serialize(parameters, ChallongeClient.SourceGenSerializerOptions);
 				parameters = JsonSerializer.Deserialize<Dictionary<string, object?>>(str, ChallongeClient.JsonSerializerOptions);
 			}
 
@@ -91,7 +91,6 @@ namespace Challonge.Helpers
 				return content;
 
 			var key = default(string?);
-			var container = new MultipartFormDataContent();
 
 			if (parameters is ChallongeObjectInfo info)
 			{

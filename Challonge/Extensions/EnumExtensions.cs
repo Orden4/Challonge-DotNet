@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Linq;
 using System.Reflection;
-using Challonge.JsonConverters;
+using System.Text.Json.Serialization;
 
 namespace Challonge.Extensions
 {

@@ -1,9 +1,8 @@
 ﻿using System.Text.Json.Serialization;
-using Challonge.JsonConverters;
 
 namespace Challonge.Objects
 {
-	[JsonConverter(typeof(CustomJsonStringEnumConverter<TournamentState>))]
+	[JsonConverter(typeof(JsonStringEnumConverter))]
 	public enum TournamentState
 	{
 		[JsonStringEnumMemberName("all")]
@@ -27,7 +26,7 @@ namespace Challonge.Objects
 		[JsonStringEnumMemberName("complete")]
 		Complete
 	}
-	[JsonConverter(typeof(CustomJsonStringEnumConverter<TournamentType>))]
+	[JsonConverter(typeof(JsonStringEnumConverter))]
 	public enum TournamentType
 	{
 		[JsonStringEnumMemberName("single elimination")]
@@ -49,7 +48,7 @@ namespace Challonge.Objects
 		[JsonStringEnumMemberName("grand prix")]
 		GrandPrix,
 	}
-	[JsonConverter(typeof(CustomJsonStringEnumConverter<RankingMethod>))]
+	[JsonConverter(typeof(JsonStringEnumConverter))]
 	public enum RankingMethod
 	{
 		[JsonStringEnumMemberName("match wins")]
@@ -69,7 +68,7 @@ namespace Challonge.Objects
 		ExponentialScoring,
 		LinearScoring
 	}
-	[JsonConverter(typeof(CustomJsonStringEnumConverter<GrandFinalsModifier>))]
+	[JsonConverter(typeof(JsonStringEnumConverter))]
 	public enum GrandFinalsModifier
 	{
 		[JsonStringEnumMemberName("single match")]
@@ -77,7 +76,7 @@ namespace Challonge.Objects
 		[JsonStringEnumMemberName("skip")]
 		Skip
 	}
-	[JsonConverter(typeof(CustomJsonStringEnumConverter<MatchState>))]
+	[JsonConverter(typeof(JsonStringEnumConverter))]
 	public enum MatchState
 	{
 		[JsonStringEnumMemberName("all")]
@@ -90,7 +89,7 @@ namespace Challonge.Objects
 		Complete
 	}
 
-	[JsonConverter(typeof(CustomJsonStringEnumConverter<TieBreak>))]
+	[JsonConverter(typeof(JsonStringEnumConverter))]
 	public enum TieBreak
 	{
 		[JsonStringEnumMemberName("match wins")]
